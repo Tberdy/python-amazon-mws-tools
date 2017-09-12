@@ -4,7 +4,6 @@ VERSION = '0.0.4'
 
 REQUIREMENTS = [
     'lxml',
-    'python-amazon-mws',
     'python-dateutil',
     'requests'
 ]
