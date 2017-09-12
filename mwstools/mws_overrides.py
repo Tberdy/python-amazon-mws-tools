@@ -508,11 +508,12 @@ class OverrideReports(_MWS):
         data.update(self.enumerate_param('ReportIdList.Id.', report_ids))
         return self.request(data)
 
-    def request_report(self, report_type, start_date=None, end_date=None, marketplaceids=()):
+    def request_report(self, report_type, start_date=None, end_date=None, marketplaceids=(), **kwargs):
         data = dict(Action='RequestReport',
                     ReportType=report_type,
                     StartDate=start_date,
-                    EndDate=end_date)
+                    EndDate=end_date,
+                    **kwargs)
         data.update(self.enumerate_param('MarketplaceIdList.Id.', marketplaceids))
         return self.request(data)
 

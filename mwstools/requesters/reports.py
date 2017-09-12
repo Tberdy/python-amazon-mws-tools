@@ -28,7 +28,7 @@ class ReportRequester(object):
                                    region=region, domain=domain, uri=uri, version=version)
         self.report_type = report_type
 
-    def _request(self, start_date=None, end_date=None, marketplaceids=()):
+    def _request(self, start_date=None, end_date=None, marketplaceids=(), **kwargs):
         """
         Send request to amazon to request new report for instances report type.
 
@@ -40,12 +40,12 @@ class ReportRequester(object):
         start_date = to_amazon_timestamp(start_date or (datetime.datetime.now() - datetime.timedelta(days=30)))
         end_date = to_amazon_timestamp(end_date or datetime.datetime.now())
         self.logger.debug('requesting {} between {} and {}'.format(self.report_type, start_date, end_date))
-        response = self.api.request_report(self.report_type, start_date, end_date, marketplaceids)
+        response = self.api.request_report(self.report_type, start_date, end_date, marketplaceids, **kwargs)
         response.raise_for_status()
         return response.content
 
-    def request(self, start_date=None, end_date=None, marketplaceids=()):
-        return RequestReportResponse.load(self._request(start_date, end_date, marketplaceids))
+    def request(self, start_date=None, end_date=None, marketplaceids=(), **kwargs):
+        return RequestReportResponse.load(self._request(start_date, end_date, marketplaceids, **kwargs))
 
     def _get_report_status(self, report_request_id):
         self.logger.debug('getting report request list for request id {}'.format(report_request_id))
@@ -88,13 +88,13 @@ class ReportRequester(object):
             raise ReportFailedError(report_request_id, status)
         return report_status_info.generated_report_id
 
-    def request_and_download(self, start_date=None, end_date=None, marketplaceids=()):
+    def request_and_download(self, start_date=None, end_date=None, marketplaceids=(), **kwargs):
         """
         request, wait, and download.
 
         :return:
         """
-        requested_report_response = self.request(start_date, end_date, marketplaceids)
+        requested_report_response = self.request(start_date, end_date, marketplaceids, **kwargs)
         report_id = self.poll(requested_report_response.request_report_result.report_request_id)
         report_contents = self.download(report_id)
         self.api.update_report_acknowledgements(report_ids=(report_id,), acknowledged=True)
