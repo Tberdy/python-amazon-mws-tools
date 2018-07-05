@@ -101,9 +101,9 @@ class _MWS(MWS):
         }
         params.update(extra_data)
         request_description = '&'.join(
-            ['%s=%s' % (k, urllib.quote(params[k], safe='-_.~').encode('utf-8')) for k in sorted(params)])
+            ['{}={}'.format(k, urllib.parse.quote(params[k], safe='-_.~')) for k in sorted(params)])
         signature = self.calc_signature(method, request_description)
-        url = '%s%s?%s&Signature=%s' % (self.domain, self.uri, request_description, urllib.quote(signature))
+        url = '{}{}?{}&Signature={}'.format(self.domain, self.uri, request_description, urllib.parse.quote(signature))
         headers = {'User-Agent': 'python-amazon-mws/0.0.1 (Language=Python)'}
         headers.update(kwargs.get('extra_headers', {}))
 

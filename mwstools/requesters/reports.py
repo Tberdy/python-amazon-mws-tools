@@ -60,7 +60,7 @@ class ReportRequester(object):
     def download(self, generated_report_id):
         self.logger.debug('downloading report for report id {}'.format(generated_report_id))
         response = self.api.get_report(generated_report_id)
-        return response.content
+        return response.text
 
     def poll(self, report_request_id):
         """
