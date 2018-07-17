@@ -100,7 +100,7 @@ def get_proper_error(error):
     return E(error.type, error.code, error.message)
 
 
-class ErrorElement(BaseElementWrapper):
+class ErrorElement(Exception, BaseElementWrapper):
 
     """
     Root element of <Error />
