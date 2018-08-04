@@ -22,10 +22,11 @@ class ReportRequester(object):
     Request wrapper for a single report.
     """
 
-    def __init__(self, access_key, secret_key, account_id, report_type, region='US', domain='', uri="", version=""):
+    def __init__(self, access_key, secret_key, account_id, report_type,
+                 region='US', auth_token="", domain='', uri="", version=""):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.api = OverrideReports(access_key=access_key, secret_key=secret_key, account_id=account_id,
-                                   region=region, domain=domain, uri=uri, version=version)
+                                   region=region, auth_token=auth_token, domain=domain, uri=uri, version=version)
         self.report_type = report_type
 
     def _request(self, start_date=None, end_date=None, marketplaceids=(), **kwargs):

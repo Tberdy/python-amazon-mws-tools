@@ -99,6 +99,8 @@ class _MWS(MWS):
             'Version': self.version,
             'SignatureMethod': 'HmacSHA256',
         }
+        if self.auth_token:
+            params['MWSAuthToken'] = self.auth_token
         params.update(extra_data)
         request_description = '&'.join(
             ['{}={}'.format(k, urllib.parse.quote(params[k], safe='-_.~')) for k in sorted(params)])
